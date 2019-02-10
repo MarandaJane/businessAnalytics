@@ -1,0 +1,92 @@
+# Load libraries
+library(tree) 
+library(ggplot2)      
+library(entropy)      
+library(FSelector)    
+
+#load dataset
+churn<-(read.csv("C:/Users/Owned/Documents/MGMT6233/churn.arff", skip=15, header=FALSE))
+names(churn) <- c("COLLEGE", "INCOME", "OVERAGE", "LEFTOVER", "HOUSE", "HANDSET_PRICE", "OVER_15MINS_CALLS_PER_MONTH", "AVERAGE_CALL_DURATION", "REPORTED_SATISFACTION", "REPORTED_USAGE_LEVEL", "CONSIDERING_CHANGE_OF_PLAN", "LEAVE")
+
+#calculate entropy
+table(churn$LEAVE) / nrow(churn)
+
+entropy( table(churn$LEAVE), unit="log2")
+
+#explore data using information.gain() *****not working see library(FSelector) for error
+information.gain(LEAVE ~ ., data=churn)
+
+#fit tree to all the other variables and view results
+fit <- tree(LEAVE ~ ., churn) 
+summary(fit)
+
+#Plot fit
+plot(fit)
+text(fit, pretty=0) 
+
+
+#Exercise 1 tree:
+
+fit.tr <- tree(Species ~., iris)
+fit.tr
+
+summary(fit.tr)
+
+
+
+table(iris$Species) / nrow(churn)
+
+entropy( table(churn$LEAVE), unit="log2")
+
+
+#fit tree to all the other variables and view results
+fit <- tree(Species ~ ., iris) 
+summary(fit)
+
+#Plot fit
+plot(fit)
+text(fit, pretty=0) 
+
+
+#******Linear Regression**********
+#Example
+library(ggplot2)
+library(MASS)  
+library(ISLR)
+names(Boston)
+
+#linear regression : medv dep var lsat ind var
+lm.fit <- lm(medv ~ lstat, data=Boston)
+summary(lm.fit)
+
+#store data in DF
+newdata <- data.frame(lstat=20)
+predict(lm.fit, newdata)
+
+#90% CI
+newdata <- data.frame(lstat=c(5, 10, 15))
+predict(lm.fit, newdata, interval="confidence", level=.90)  # 90% confidence interval
+
+
+#plot lm.fit
+ggplot(Boston, aes(lstat, medv)) + geom_point() + geom_abline(intercept=coef(lm.fit)[1], slope=coef(lm.fit)[2])
+
+#summary with interaction terms
+summary( lm( medv ~ lstat * age, data=Boston))
+
+
+
+#linear regression : medv dep var lsat ind var
+#fit 1
+fit1 <- lm(medv ~ lstat, data=Boston)
+summary(fit1)
+
+
+#fit 2
+#linear regression : medv dep var lsat ind var
+fit2<- lm(medv ~ age, data=Boston)
+summary(fit2)
+
+
+
+
