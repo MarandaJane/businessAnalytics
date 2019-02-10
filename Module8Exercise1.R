@@ -1,4 +1,3 @@
-#MJDonaldsonMGMT6233Module8Exercise1
 #Results for K-means =3
 newiris <- iris
 newiris$Species <- NULL
